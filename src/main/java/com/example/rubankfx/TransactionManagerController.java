@@ -3,7 +3,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
-public class TransactionManagerController{
+public class TransactionManagerController {
 
     @FXML
     private TextField OC_First_Name;
@@ -75,6 +75,7 @@ public class TransactionManagerController{
 
     @FXML
     private ListView<String> listView3; // Replace with the correct type
+
 
     private void handleRadioButtonAction(ActionEvent event) {
         RadioButton selectedRadioButton = (RadioButton) event.getSource();

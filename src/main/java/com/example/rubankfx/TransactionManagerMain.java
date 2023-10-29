@@ -14,8 +14,7 @@ public class TransactionManagerMain extends Application {
         stage.setHeight(720);
         stage.setTitle("Transaction Manager");
         FXMLLoader fxmlLoader = new FXMLLoader(TransactionManagerMain.class.getResource("TransactionManagerView.fxml"));
-        Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("Transaction Manager");
+        Scene scene = new Scene(fxmlLoader.load(), 1280, 720); // Match the scene size with the stage size
         stage.setScene(scene);
         stage.show();
     }
