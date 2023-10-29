@@ -13,7 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
 
-<TabPane prefHeight="545.0" prefWidth="646.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rubankfx.TransactionManagerController">
+<TabPane prefHeight="599.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rubankfx.TransactionManagerController">
    <tabs>
       <Tab text="Open/Close">
          <content>
@@ -35,10 +35,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <RadioButton fx:id="OC_Checking" mnemonicParsing="false" text="Checking" />
-                        <RadioButton fx:id="OC_CC" mnemonicParsing="false" text="College Checking" GridPane.columnIndex="1" />
-                        <RadioButton fx:id="OC_Savings" mnemonicParsing="false" text="Savings" GridPane.rowIndex="1" />
-                        <RadioButton fx:id="OC_MM" mnemonicParsing="false" text="Money Market" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <RadioButton fx:id="OC_Checking" mnemonicParsing="false" onAction="#OChandleRadioButtonAction" text="Checking" />
+                        <RadioButton fx:id="OC_CC" mnemonicParsing="false" onAction="#OChandleRadioButtonAction" text="College Checking" GridPane.columnIndex="1" />
+                        <RadioButton fx:id="OC_Savings" mnemonicParsing="false" onAction="#OChandleRadioButtonAction" text="Savings" GridPane.rowIndex="1" />
+                        <RadioButton fx:id="OC_MM" mnemonicParsing="false" onAction="#OChandleRadioButtonAction" text="Money Market" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                   <Text layoutX="397.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Type" />
@@ -59,10 +59,24 @@
                      </children>
                   </GridPane>
                   <Text layoutX="408.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campus" />
-                  <Button fx:id="Open" layoutX="24.0" layoutY="117.0" mnemonicParsing="false" text="Open" />
-                  <Button fx:id="Close" layoutX="83.0" layoutY="117.0" mnemonicParsing="false" text="Close" />
-                  <Button fx:id="Clear" layoutX="146.0" layoutY="117.0" mnemonicParsing="false" text="Clear" />
                   <ListView layoutX="10.0" layoutY="227.0" prefHeight="317.0" prefWidth="584.0" />
+                  <GridPane layoutX="45.0" layoutY="177.0" prefHeight="30.0" prefWidth="220.0">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                     <children>
+                        <Button fx:id="Open" mnemonicParsing="false" onAction="#OpenAccount" prefHeight="106.0" prefWidth="73.0" text="Open" />
+                        <Button fx:id="Close" mnemonicParsing="false" onAction="#CloseAccount" prefHeight="66.0" prefWidth="73.0" text="Close" GridPane.columnIndex="1" />
+                        <Button fx:id="Clear" mnemonicParsing="false" prefHeight="69.0" prefWidth="74.0" text="Clear" GridPane.columnIndex="2" />
+                     </children>
+                  </GridPane>
+                  <TextField fx:id="InitDeposit" layoutX="91.0" layoutY="100.0" />
+                  <Text layoutX="13.0" layoutY="117.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Initial Deposit" />
                </children>
             </AnchorPane>
          </content>

@@ -4,7 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class TransactionManagerController {
-
+    @FXML
+    public TextField InitDeposit;
+    //Open/Close variables
     @FXML
     private TextField OC_First_Name;
     @FXML
@@ -28,6 +30,41 @@ public class TransactionManagerController {
     private RadioButton Campus_B;
     @FXML
     private RadioButton Campus_L;
+
+    @FXML
+    private void OChandleRadioButtonAction(ActionEvent event) {
+        RadioButton selectedRadioButton = (RadioButton) event.getSource();
+        if (selectedRadioButton == OC_Checking) {
+            OC_CC.setSelected(false);
+            OC_Savings.setSelected(false);
+            OC_MM.setSelected(false);
+        } else if (selectedRadioButton == OC_CC) {
+            OC_Checking.setSelected(false);
+            OC_Savings.setSelected(false);
+            OC_MM.setSelected(false);
+        } else if (selectedRadioButton == OC_Savings) {
+            OC_Checking.setSelected(false);
+            OC_CC.setSelected(false);
+            OC_MM.setSelected(false);
+        } else if (selectedRadioButton == OC_MM) {
+            OC_Checking.setSelected(false);
+            OC_CC.setSelected(false);
+            OC_Savings.setSelected(false);
+        }
+        Campus_CD.setDisable(!OC_CC.isSelected());
+        Campus_CA.setDisable(!OC_CC.isSelected());
+        Campus_B.setDisable(!OC_CC.isSelected());
+        Campus_L.setDisable(!OC_CC.isSelected());
+    }
+    @FXML
+    void OpenAccount(ActionEvent event){
+        System.out.println("Opening Account");
+    }
+    @FXML
+    void CloseAccount(ActionEvent event){
+        System.out.println("Closing Account");
+    }
+
 
     @FXML
     private Button Open;
@@ -77,25 +114,5 @@ public class TransactionManagerController {
     private ListView<String> listView3; // Replace with the correct type
 
 
-    private void handleRadioButtonAction(ActionEvent event) {
-        RadioButton selectedRadioButton = (RadioButton) event.getSource();
 
-        if (selectedRadioButton == OC_Checking) {
-            OC_CC.setSelected(false);
-            OC_Savings.setSelected(false);
-            OC_MM.setSelected(false);
-        } else if (selectedRadioButton == OC_CC) {
-            OC_Checking.setSelected(false);
-            OC_Savings.setSelected(false);
-            OC_MM.setSelected(false);
-        } else if (selectedRadioButton == OC_Savings) {
-            OC_Checking.setSelected(false);
-            OC_CC.setSelected(false);
-            OC_MM.setSelected(false);
-        } else if (selectedRadioButton == OC_MM) {
-            OC_Checking.setSelected(false);
-            OC_CC.setSelected(false);
-            OC_Savings.setSelected(false);
-        }
-    }
 }
