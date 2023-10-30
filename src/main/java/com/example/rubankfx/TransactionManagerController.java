@@ -76,6 +76,7 @@ public class TransactionManagerController {
     @FXML
     private ListView<?> listView1; // Replace with the correct type
 
+    //DEPOSIT AND WITHDRAW STUFF
     @FXML
     private TextField DW_First_Name;
     @FXML
