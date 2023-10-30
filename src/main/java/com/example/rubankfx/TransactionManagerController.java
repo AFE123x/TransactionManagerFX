@@ -85,11 +85,32 @@ public class TransactionManagerController {
     @FXML
     private RadioButton DW_Checking;
     @FXML
-    private RadioButton DW_College_check;
+    private RadioButton DW_CC;
     @FXML
     private RadioButton DW_Savings;
     @FXML
-    private RadioButton DW_Money_Market;
+    private RadioButton DW_MM;
+    @FXML
+    private void DWhandleRadioButtonAction(ActionEvent event) {
+        RadioButton selectedRadioButton = (RadioButton) event.getSource();
+        if (selectedRadioButton == DW_Checking) {
+            DW_CC.setSelected(false);
+            DW_Savings.setSelected(false);
+            DW_MM.setSelected(false);
+        } else if (selectedRadioButton == DW_CC) {
+            DW_Checking.setSelected(false);
+            DW_Savings.setSelected(false);
+            DW_MM.setSelected(false);
+        } else if (selectedRadioButton == DW_Savings) {
+            DW_Checking.setSelected(false);
+            DW_CC.setSelected(false);
+            DW_MM.setSelected(false);
+        } else if (selectedRadioButton == DW_MM) {
+            DW_Checking.setSelected(false);
+            DW_CC.setSelected(false);
+            DW_Savings.setSelected(false);
+        }
+    }
     @FXML
     private TextField textField1; // Replace with the correct type
 

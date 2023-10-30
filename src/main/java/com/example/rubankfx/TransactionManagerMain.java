@@ -10,7 +10,7 @@ import java.io.IOException;
 public class TransactionManagerMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        stage.setWidth(1280/2);
+        stage.setWidth(637);
         stage.setHeight(720);
         stage.setResizable(false);
         stage.setTitle("Transaction Manager");

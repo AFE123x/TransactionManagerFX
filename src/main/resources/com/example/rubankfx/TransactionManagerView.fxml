@@ -102,10 +102,10 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <RadioButton fx:id="DW_Checking" mnemonicParsing="false" text="Checking" />
-                        <RadioButton fx:id="DW_College_check" mnemonicParsing="false" text="College Checking" GridPane.columnIndex="1" />
-                        <RadioButton fx:id="DW_Savings" mnemonicParsing="false" text="Savings" GridPane.rowIndex="1" />
-                        <RadioButton fx:id="DW_Money_Market" mnemonicParsing="false" text="Money Market" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <RadioButton fx:id="DW_Checking" mnemonicParsing="false" onAction="#DWhandleRadioButtonAction" text="Checking" />
+                        <RadioButton fx:id="DW_CC" mnemonicParsing="false" onAction="#DWhandleRadioButtonAction" text="College Checking" GridPane.columnIndex="1" />
+                        <RadioButton fx:id="DW_Savings" mnemonicParsing="false" onAction="#DWhandleRadioButtonAction" text="Savings" GridPane.rowIndex="1" />
+                        <RadioButton fx:id="DW_MM" mnemonicParsing="false" onAction="#DWhandleRadioButtonAction" text="Money Market" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                   <Text layoutX="377.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Type" />
