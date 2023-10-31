@@ -34,9 +34,9 @@ public class Profile implements Comparable<Profile> {
      * @return A Profile object or null if the input is not valid.
      */
     public static Profile makeProfile(String[] input) {
-        Date dob = Date.makeDate(input[4]);
+        Date dob = Date.makeDate(input[3]);
         if (dob.isValid()){
-            return new Profile(input[2], input[3], dob);
+            return new Profile(input[1], input[2], dob);
         }else{
             throw new IllegalArgumentException();
         }

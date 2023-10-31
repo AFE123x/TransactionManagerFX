@@ -4,9 +4,12 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
 public class TransactionManagerController {
+    /*
+    This area contains all the components from the Open/Close page.
+     */
+    AccountDatabase database = new AccountDatabase();
     @FXML
     public TextField InitDeposit;
-    //Open/Close variables
     @FXML
     private TextField OC_First_Name;
     @FXML
@@ -30,7 +33,7 @@ public class TransactionManagerController {
     private RadioButton Campus_B;
     @FXML
     private RadioButton Campus_L;
-
+    AccountDatabase AccountDatabase = new AccountDatabase();
     @FXML
     private void OChandleRadioButtonAction(ActionEvent event) {
         RadioButton selectedRadioButton = (RadioButton) event.getSource();
@@ -58,15 +61,43 @@ public class TransactionManagerController {
     }
     @FXML
     void OpenAccount(ActionEvent event){
-        System.out.println("Opening Account");
+
+        switch(OCAcctdecision()){
+            case -1:
+                return;
+            case 0:// Checkings Account.
+                //CC,John,Doe,2/19/2000,599.99,0
+                String [] array = {"CC",OC_First_Name.getText(),OC_Last_Name.getText(),InitDeposit.getText(), OC_DOB.getValue().toString().replace("-", "/")};
+                database.open(Checking.makeChecking(array));
+                System.out.println(Checking.makeChecking(array));
+                break;
+
+
+        }
     }
     @FXML
     void CloseAccount(ActionEvent event){
         System.out.println("Closing Account");
     }
-
-
     @FXML
+    private int OCAcctdecision() {
+        if (OC_Checking.isSelected()) {
+            return 0;
+        } else if (OC_CC.isSelected()) {
+            return 1;
+        } else if (OC_Savings.isSelected()) {
+            return 2;
+        } else if (OC_MM.isSelected()) {
+            return 3;
+        }
+        return -1;
+    }
+
+
+
+
+
+@FXML
     private Button Open;
     @FXML
     private Button Close;
