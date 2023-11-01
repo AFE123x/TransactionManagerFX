@@ -36,7 +36,7 @@ public class Checking extends Account {
      * @throws IndexOutOfBoundsException If the input data array is shorter than expected.
      * @throws NullPointerException If any required data is missing.
      */
-    public static Checking makeChecking(String [] input) throws NumberFormatException, IndexOutOfBoundsException, NullPointerException{
+    /*public static Checking makeChecking(String [] input) throws NumberFormatException, IndexOutOfBoundsException, NullPointerException{
         Profile profile = Profile.makeProfile(input);
         boolean exists = !input[0].equals("C");
         // System.out.println(exists);
@@ -44,6 +44,11 @@ public class Checking extends Account {
 
         if(balance <= 0 && exists){System.out.println("Initial deposit cannot be 0 or negative.");}
         return (!exists || balance > 0 )? new Checking(profile,balance) : null;
+    }*/
+
+    public static Checking makeChecking(Profile profile, double balance) throws Exception {
+
+        return new Checking(profile, balance);
     }
 
     /**
