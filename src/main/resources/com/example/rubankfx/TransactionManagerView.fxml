@@ -12,6 +12,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.CheckBox?>
+
 
 <TabPane prefHeight="599.0" prefWidth="611.0" tabClosingPolicy="UNAVAILABLE" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.rubankfx.TransactionManagerController">
    <tabs>
@@ -52,14 +55,14 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <RadioButton fx:id="Campus_CD" mnemonicParsing="false" text="Cook/Doug" />
-                        <RadioButton fx:id="Campus_CA" mnemonicParsing="false" prefHeight="27.0" prefWidth="143.0" text="College Avenue" GridPane.columnIndex="1" />
-                        <RadioButton fx:id="Campus_B" mnemonicParsing="false" text="Busch" GridPane.rowIndex="1" />
-                        <RadioButton fx:id="Campus_L" mnemonicParsing="false" text="Livingston" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                        <RadioButton fx:id="Campus_NB" mnemonicParsing="false" text="New Brunswick" toggleGroup="$campusToggleGroup"/>
+                        <RadioButton fx:id="Campus_NW" mnemonicParsing="false" prefHeight="27.0" prefWidth="143.0" text="College Camden" GridPane.columnIndex="1" toggleGroup="$campusToggleGroup"/>
+                        <RadioButton fx:id="Campus_C" mnemonicParsing="false" text="Camden" GridPane.rowIndex="1" toggleGroup="$campusToggleGroup"/>
                      </children>
                   </GridPane>
+                  <CheckBox fx:id="Loyalty" layoutX="324.0" layoutY="235.0" mnemonicParsing="false" text="isLoyal"/>
                   <Text layoutX="408.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Campus" />
-                  <ListView layoutX="10.0" layoutY="227.0" prefHeight="317.0" prefWidth="584.0" />
+                  <ListView fx:id="messageListView" layoutX="10.0" layoutY="260.0" prefHeight="317.0" prefWidth="584.0" />
                   <GridPane layoutX="45.0" layoutY="177.0" prefHeight="30.0" prefWidth="220.0">
                     <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -72,7 +75,7 @@
                      <children>
                         <Button fx:id="Open" mnemonicParsing="false" onAction="#OpenAccount" prefHeight="106.0" prefWidth="73.0" text="Open" />
                         <Button fx:id="Close" mnemonicParsing="false" onAction="#CloseAccount" prefHeight="66.0" prefWidth="73.0" text="Close" GridPane.columnIndex="1" />
-                        <Button fx:id="Clear" mnemonicParsing="false" prefHeight="69.0" prefWidth="74.0" text="Clear" GridPane.columnIndex="2" />
+                        <Button fx:id="Clear" mnemonicParsing="false" onAction="#ClearScreen" prefHeight="69.0" prefWidth="74.0" text="Clear" GridPane.columnIndex="2" />
                      </children>
                   </GridPane>
                   <TextField fx:id="InitDeposit" layoutX="91.0" layoutY="100.0" />
@@ -121,7 +124,7 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <ListView layoutX="10.0" layoutY="227.0" prefHeight="317.0" prefWidth="584.0" />
+                  <ListView fx:id="accountsListView" layoutX="10.0" layoutY="227.0" prefHeight="317.0" prefWidth="584.0" />
                   <GridPane layoutX="102.0" layoutY="25.0" prefHeight="138.0" prefWidth="381.0">
                      <columnConstraints>
                         <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -132,7 +135,7 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                      </rowConstraints>
                      <children>
-                        <Button fx:id="Print_Account" mnemonicParsing="false" prefHeight="91.0" prefWidth="191.0" text="Print all Accounts" />
+                        <Button fx:id="Print_Account" mnemonicParsing="false" prefHeight="91.0" prefWidth="191.0" text="Print all Accounts" onAction="#handlePrintAccountsAction" />
                         <Button fx:id="Load_File" mnemonicParsing="false" prefHeight="119.0" prefWidth="190.0" text="Load Account from File" GridPane.columnIndex="1" />
                         <Button fx:id="Apply_Interest" mnemonicParsing="false" prefHeight="101.0" prefWidth="190.0" text="Apply Interest and Fees" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                         <Button fx:id="Print_Fees" mnemonicParsing="false" prefHeight="137.0" prefWidth="191.0" text="Print Interest and Fees" GridPane.rowIndex="1" />
