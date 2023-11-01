@@ -33,14 +33,14 @@ public class Profile implements Comparable<Profile> {
      * @param input The string array containing profile details.
      * @return A Profile object or null if the input is not valid.
      */
-    public static Profile makeProfile(String[] input) {
-        Date dob = Date.makeDate(input[3]);
+    /*public static Profile makeProfile(String[] input) {
+        
         if (dob.isValid()){
             return new Profile(input[1], input[2], dob);
         }else{
             throw new IllegalArgumentException();
         }
-    }
+    }*/
 
     /**
      * Retrieves the first name of the profile holder.

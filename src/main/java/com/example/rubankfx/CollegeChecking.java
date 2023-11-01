@@ -21,11 +21,11 @@ public class CollegeChecking extends Checking {
      * Enum representing various campuses.
      */
     private enum Campus {
-        NEW_BRUNSWICK("0", "New Brunswick"),
-        NEWARK("1", "Newark"),
-        CAMDEN("2", "Camden");
+        NEW_BRUNSWICK(0, "New Brunswick"),
+        NEWARK(1, "Newark"),
+        CAMDEN(2, "Camden");
         /** Value associated with the campus */
-        private final String value;
+        private final int value;
         /** Name of the campus */
         private final String name;
 
@@ -35,11 +35,13 @@ public class CollegeChecking extends Checking {
          * @param value the associated value of the campus
          * @param name the name of the campus
          */
-        Campus(String value, String name) {
+        Campus(int value, String name) {
             this.value = value;
             this.name = name;
         }
     }
+
+    
     //0 – New Brunswick, 1 – Newark, 2 – Camden
 
     /** Variable storing the associated campus for the account */
@@ -52,16 +54,16 @@ public class CollegeChecking extends Checking {
      * @param balance initial balance of the account
      * @param campusCode code representing the associated campus
      */
-    public CollegeChecking(Profile holder, double balance, String campusCode) {
+    public CollegeChecking(Profile holder, double balance, int campusCode) {
         super(holder, balance);
         switch(campusCode){
-            case "0":
+            case 0:
                 this.campus = Campus.NEW_BRUNSWICK;
                 break;
-            case "1":
+            case 1:
                 this.campus = campus.NEWARK;
                 break;
-            case "2":
+            case 2:
                 this.campus = campus.CAMDEN;
                 break;
             default:
@@ -82,7 +84,7 @@ public class CollegeChecking extends Checking {
      * @throws NumberFormatException If there's an error in parsing the balance from the input data.
      * @throws IndexOutOfBoundsException If the input data array is shorter than expected.
      */
-    public static CollegeChecking makeCollegeChecking(String [] input) throws NumberFormatException, IndexOutOfBoundsException{
+    /*public static CollegeChecking makeCollegeChecking(String [] input) throws NumberFormatException, IndexOutOfBoundsException{
         Profile profile = Profile.makeProfile(input);
         if(profile == null){
             return null;
@@ -105,7 +107,19 @@ public class CollegeChecking extends Checking {
             tempcampusCode = "_";
         }
         return  new CollegeChecking(profile, tempbalance, tempcampusCode);
+    }*/
+
+     public static CollegeChecking makeCollegeChecking(Profile profile, double balance, int campusCode)
+            throws IllegalArgumentException {
+
+        if (campusCode < 0 || campusCode > 2) {
+            throw new IllegalArgumentException("Invalid campus code.");
+        }
+
+        return new CollegeChecking(profile, balance, campusCode);
     }
+
+    
     /**
      * Returns the monthly interest added to the account.
      *
