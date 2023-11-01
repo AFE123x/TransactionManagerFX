@@ -15,6 +15,8 @@ public class AccountDatabase {
     /** Number of active accounts in the database. */
     private int numAcct;
 
+    private String lastMessage;
+
     /**
      * Default constructor initializing the database with default size.
      */
@@ -83,19 +85,23 @@ public class AccountDatabase {
      */
     public boolean open(Account account){
         if(account == null){
+            lastMessage = "AM";
             return false;
         }
         else if(contains(account)){
-            System.out.printf("%s(%s) is already in the database.\n",account.getProfile().toString(),account.GetType());
+            lastMessage = "AE";
             return false;
         }
         accounts[numAcct++] = account;
         if(numAcct >= accounts.length){
             grow();
         }
-        System.out.printf("%s(%s) opened.\n",account.getProfile().toString(),account.GetType());
         return true;
     } //add a new account
+
+    public String getLastMessage() {
+        return lastMessage;
+    }
 
     /**
      * closes account
