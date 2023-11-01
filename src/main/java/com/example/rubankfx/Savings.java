@@ -46,7 +46,7 @@ public class Savings extends Account{
      * @throws NumberFormatException if the number inputted by client is invalid
      * @throws IndexOutOfBoundsException if inadequate arguments were provided.
      */
-    public static Savings makeSavings(String [] input) throws NumberFormatException, IndexOutOfBoundsException{
+    /*public static Savings makeSavings(String [] input) throws NumberFormatException, IndexOutOfBoundsException{
 
         Profile profile = Profile.makeProfile(input);
         if(profile == null){throw new IllegalArgumentException();}
@@ -57,6 +57,11 @@ public class Savings extends Account{
         // System.out.println(exists);
         if(exists && balance <= 0){System.out.println("Initial deposit cannot be 0 or negative."); return null;};
         isLoyal = input[0].equals("O") ? Integer.parseInt(input[6]) == 1 : false;
+        return new Savings(profile, balance, isLoyal);
+
+    }*/
+    public static Savings makeSavings(Profile profile, double balance,boolean isLoyal) throws NumberFormatException{
+
         return new Savings(profile, balance, isLoyal);
 
     }
