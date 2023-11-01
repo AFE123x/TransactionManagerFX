@@ -37,6 +37,23 @@ public class AccountDatabase {
         return -1;
     }
 
+     public Account[] getAllAccounts() {
+        Account[] activeAccounts = new Account[numAcct];
+        for (int i = 0; i < numAcct; i++) {
+            activeAccounts[i] = accounts[i];
+        }
+        return activeAccounts;
+    }
+
+
+    public Account getAccount(Account account) {
+        int index = find(account);
+        if (index != -1) {
+            return accounts[index];
+        }
+        return null;
+    }
+
     /**
      * Will make a new array of size accounts + 4, copy data from old array,
      * the point the old array to the new array.
