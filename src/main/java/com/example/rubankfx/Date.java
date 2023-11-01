@@ -31,6 +31,7 @@ public class Date implements Comparable<Date>{
     private int year;
     private int month;
     private int day;
+    private String lastMessage;
 
     /**
      * Initializes a new Date object with a specified year, month, and day.
@@ -107,7 +108,7 @@ public class Date implements Comparable<Date>{
 
         // if age if current or future date
         if(this.compareTo(currDate) >= 0){
-            System.out.println("DOB invalid: " + toString() + " cannot be today or future day!");
+            lastMessage = "Date cannot be the current or Future Date";
             return false;
         }
 
@@ -120,11 +121,14 @@ public class Date implements Comparable<Date>{
 
 
         // Check if age is 16 or above
-        if (age < 16) {
-            System.out.println("DOB invalid: Age is below 16 years.");
-            return false;
+        if(age < 16){
+            lastMessage = "Age cannot be less than 16!";
         }
-        return true;
+        return age >= 16;
+    }
+
+    public String getLastMessage() {
+        return lastMessage;
     }
 
     /**
@@ -145,10 +149,10 @@ public class Date implements Comparable<Date>{
         }
         // System.out.println(age);
         if (age >= 24) {
-            System.out.printf("DOB invalid: %s over 24\n", toString());
+            lastMessage = "Age cannot be more than 24 for College Checking";
             return false;
         } else if (age < 16) {
-            System.out.printf("DOB invalid: %s under 16.\n", toString());
+            lastMessage = "Age cannot be less than 16";
             return false;
         }
 
