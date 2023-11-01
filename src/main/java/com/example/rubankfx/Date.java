@@ -168,7 +168,6 @@ public class Date implements Comparable<Date>{
      * @return returns false indicating that the date is invalid.
      */
     private boolean printError() {
-        System.out.println(toString() + ": Invalid calendar date!");
         return false;
     }
 
