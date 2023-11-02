@@ -113,30 +113,37 @@ public class AccountDatabase {
             for(int i = 0; i < numAcct; i++){
                 if(account.equals(accounts[i])){
                     accounts[i] = null;
-                    numAcct--;
                     shiftLeft(i);
-                    System.out.printf("%s(%s) has been closed.\n",account.getProfile().toString(),account.GetType());
                     return true;
                 }
             }
-            System.out.printf("%s(%s) is not in the database.\n",account.getProfile().toString(),account.GetType());
         }
         return false;
 
     } //remove the given account
     /**
      * Shifts contents of the array to the left.
-     * @param index
+     * @param index an integer representing the index of the array from where the values must be shifted
      */
     private void shiftLeft(int index) {
-        if (index >= 0 && index < numAcct) {
-            for (int i = index; i < numAcct + 1; i++) {
+        if (index >= 0 && index < numAcct - 1) { // Check should be 'index < numAcct - 1' instead of 'index < numAcct + 1'
+            for (int i = index; i < numAcct - 1; i++) { // Loop until the second to last element
                 accounts[i] = accounts[i + 1];
             }
-            accounts[numAcct - 1] = null;
+            accounts[numAcct - 1] = null; // Set the last account to null
         }
-        numAcct = newAcct();
+        numAcct--; // Decrease the number of accounts after shifting left
     }
+
+    public Account getAccountByProfileAndType(Profile profile,String type) {
+        for (int i = 0; i < numAcct; i++) {
+            if(accounts[i].getProfile().equals(profile) && accounts[i].GetType().equals(type)){
+                return accounts[i];
+            }
+        }
+        return null;
+    }
+    
     /**
      * This will assign the Account index to the last non null account in array to prevent null pointer exception
      * @return new array index containing last account.
