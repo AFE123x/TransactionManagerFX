@@ -215,10 +215,55 @@ public class TransactionManagerController implements Initializable{
         return null;
     }
 
+    private String getSelectedAccountType() {
+        if (OC_Checking.isSelected()) {
+            return "C";
+        } else if (OC_CC.isSelected()) {
+            return "CC";
+        } else if (OC_Savings.isSelected()) {
+            return "S";
+        } else if (OC_MM.isSelected()) {
+            return "MM";
+        } else {
+            return null; // or "None" depending on how you want to handle no selection
+        }
+    }
+
 
     @FXML
     void CloseAccount(ActionEvent event){
-        //toDO
+        try{
+            String type = getSelectedAccountType();
+            if(type == null){
+                addMessageToListView("Please Select an Account type!");
+                return;
+            }
+            boolean closed;
+            LocalDate localDate = OC_DOB.getValue();
+            if (localDate == null) {
+                addMessageToListView("Please enter a valid date! ");
+                return;
+            }
+            Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+            if (!date.isValid()) {
+                messageListView.getItems().add(date.getLastMessage());
+                return;
+            }
+            Profile profile = makeProfile(date);
+            Account accountToClose = database.getAccountByProfileAndType(profile, type);
+            if(accountToClose == null){
+                addMessageToListView("Account does not Exist!");
+                return;
+            }else{
+                closed = database.close(accountToClose);
+                if(closed){
+                    addMessageToListView("Account Closed Successfully!");
+                }
+            }
+        }catch(Exception e){
+            addMessageToListView("Fatal error occurred! Account cannot be removed");
+        }
+
     }
     @FXML
     private int OCAcctdecision() {
@@ -306,7 +351,10 @@ public class TransactionManagerController implements Initializable{
     private void handlePrintAccountsAction(ActionEvent event) {
         Account[] allAccounts = database.getAllAccounts();
         accountsListView.getItems().clear();
-
+        if(allAccounts == null){
+            accountsListView.getItems().add("Account Database is Empty! ");
+            return;
+        }
         for (Account account : allAccounts) {
             accountsListView.getItems().add(account.toString());
         }
