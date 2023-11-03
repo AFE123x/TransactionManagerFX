@@ -310,7 +310,6 @@ public class Date implements Comparable<Date>{
         Date date = new Date(year, month, day);
         boolean isValid = date.isValid();
         String result = isValid == expected ? "PASSED" : "FAILED";
-        System.out.printf("Testing Date: %s Expected: %s Actual: %s Result: %s%n", date, expected, isValid, result);
     }
     /**
      * Test the validity of a College Checking Date object by comparing it to an expected result.
@@ -324,7 +323,6 @@ public class Date implements Comparable<Date>{
         Date date = new Date(year, month, day);
         boolean isValid = date.checkCollegeCheckingValidity();
         String result = isValid == expected ? "PASSED" : "FAILED";
-        System.out.printf("Testing College Checking Date: %s Expected: %s Actual: %s Result: %s%n", date, expected, isValid, result);
     }
 
 }
