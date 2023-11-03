@@ -1,5 +1,8 @@
 package com.example.rubankfx;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * Represents a database to manage multiple accounts.
  * Provides functionalities for opening, closing, depositing into, and withdrawing from accounts.
@@ -27,8 +30,8 @@ public class AccountDatabase {
 
     /**
      * Finds the index number of an account.
-     * @param account
-     * @return
+     * @param account obj
+     * @return i index of the account found
      */
     private int find(Account account) {
         for(int i = 0; i < numAcct; i++){
@@ -39,22 +42,17 @@ public class AccountDatabase {
         return -1;
     }
 
-     public Account[] getAllAccounts() {
+    public Account[] getAllAccounts() {
         Account[] activeAccounts = new Account[numAcct];
-        for (int i = 0; i < numAcct; i++) {
+        if(numAcct == 0){
+            return null;
+        }
+        for(int i = 0; i < numAcct; i++) {
             activeAccounts[i] = accounts[i];
         }
         return activeAccounts;
     }
 
-
-    public Account getAccount(Account account) {
-        int index = find(account);
-        if (index != -1) {
-            return accounts[index];
-        }
-        return null;
-    }
 
     /**
      * Will make a new array of size accounts + 4, copy data from old array,
@@ -71,7 +69,7 @@ public class AccountDatabase {
 
     /**
      * Checks if database contains given account.
-     * @param account
+     * @param account obj
      * @return True if account was found, False otherwise.
      */
     public boolean contains(Account account){
@@ -80,7 +78,7 @@ public class AccountDatabase {
 
     /**
      * Given a valid account, the account will be added to database.
-     * @param account
+     * @param account obj
      * @return true if the account was added successfully, false otherwise.
      */
     public boolean open(Account account){
@@ -143,7 +141,9 @@ public class AccountDatabase {
         }
         return null;
     }
-    
+
+
+
     /**
      * This will assign the Account index to the last non null account in array to prevent null pointer exception
      * @return new array index containing last account.
@@ -157,7 +157,7 @@ public class AccountDatabase {
     }
     /**
      * Withdraws money from accounts.
-     * @param account
+     * @param account obj
      * @return true if withdrawn successfully, false otherwise.
      */
     public boolean withdraw(Account account){
@@ -183,55 +183,50 @@ public class AccountDatabase {
         for(int i = 0; i < numAcct; i++){
             if(account.equals(accounts[i])){
                 accounts[i].deposit(account.getbalance());
-                System.out.printf("%s(%s) Deposit - balance updated.\n",account.getProfile().toString(),account.GetType());
             }
         }
     }
 
+
     /**
      * Prints the list of accounts sorted by account type and profile.
      */
-    public void printSorted(){
+    public void Sort(){
         if(numAcct < 1){
-            System.out.println("Account Database is empty!");
             return;
         }
         quicksort(0, numAcct - 1);
-        System.out.println("*Accounts sorted by account type and profile.");
-        for(int i = 0; i < numAcct; i++){
-            System.out.println(accounts[i]);
-        }
-        System.out.println("*end of list.");
     } //sort by account type and profile
+
+
 
     /**
      * Prints the fees and interest rates with the accounts
      */
-    public void printFeesAndInterests(){
+    public List<String> getInterestInfo(){
+
+        List<String> InfoList = new ArrayList<>();
         if(numAcct < 1){
-            System.out.println("Account Database is empty!");
-            return;
+            return null;
         }
-        quicksort(0, numAcct - 1);
         for(int i = 0; i < numAcct; i++){
-            System.out.println(accounts[i].toString() + "::fee $" + accounts[i].monthlyFee() + "::monthly interest $" + accounts[i].monthlyInterest());
+            String interestInfo = accounts[i].toString() + "::fee $" + accounts[i].monthlyFee() + "::monthly interest $" + accounts[i].monthlyInterest();
+            InfoList.add(interestInfo);
         }
-        System.out.println("*end of list.");
+        InfoList.add("*end of list.");
+        return InfoList;
     }
 
     /**
      * Updates account balances by applying interests and fees.
      */
-    public void printUpdatedBalances(){
+    public void updateBalances(){
         if(numAcct < 1){
-            System.out.println("Account Database is empty!");
             return;
         }
         for(int i = 0; i < numAcct; i++){
             accounts[i].withdraw(accounts[i].monthlyFee()+accounts[i].monthlyInterest());
         }
-        printFeesAndInterests();
-
     }
 
     /**
