@@ -48,6 +48,8 @@ public abstract class Account implements Comparable<Account> {
         return holder;
     }
 
+     private String helperMessage;
+
 
     /**
      * Deposits the specified amount to this account.
@@ -58,15 +60,18 @@ public abstract class Account implements Comparable<Account> {
         balance += amount;
     }
     public void withdraw(double amount) {
-        if(this.balance - amount > 0){
+        if(this.balance - amount >= 0){
             balance -= amount;
+            helperMessage = "Withdrawal Successful! ";
         }
         else{
-            System.out.printf("%s(%s) Withdraw - insufficient fund.\n",getProfile().toString(),GetType());
+            helperMessage = "Cannot Withdraw - insufficient funds in the account: " + this.getProfile().toString() + this.GetType();
         }
 
     }
-
+    public String getHelperMessage() {
+        return helperMessage;
+    }
     /**
      * Retrieves the current balance of this account.
      *
