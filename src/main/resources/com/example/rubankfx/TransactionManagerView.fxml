@@ -88,7 +88,7 @@
          <content>
             <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                <children>
-                  <ListView layoutX="10.0" layoutY="227.0" prefHeight="317.0" prefWidth="584.0" />
+                  <ListView fx:id="withdrawView" layoutX="10.0" layoutY="227.0" prefHeight="317.0" prefWidth="584.0" />
                   <TextField fx:id="DW_First_Name" layoutX="77.0" layoutY="22.0" />
                   <Text layoutX="10.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="First Name" />
                   <TextField fx:id="DW_Last_Name" layoutX="302.0" layoutY="22.0" />
@@ -112,10 +112,10 @@
                      </children>
                   </GridPane>
                   <Text layoutX="377.0" layoutY="80.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Account Type" />
-                  <TextField layoutX="377.0" layoutY="178.0" />
+                  <TextField fx:id="BalanceDW" layoutX="377.0" layoutY="178.0" />
                   <Text layoutX="429.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Amount" />
-                  <Button fx:id="Deposit" layoutX="94.0" layoutY="128.0" mnemonicParsing="false" text="Deposit" />
-                  <Button fx:id="Withdraw" layoutX="89.0" layoutY="166.0" mnemonicParsing="false" text="Withdraw" />
+                  <Button fx:id="Deposit" layoutX="94.0" onAction="#deposit" layoutY="128.0" mnemonicParsing="false" text="Deposit" />
+                  <Button fx:id="Withdraw" layoutX="89.0" onAction="#withDraw" layoutY="166.0" mnemonicParsing="false" text="Withdraw" />
                </children>
             </AnchorPane>
          </content>
@@ -138,7 +138,7 @@
                         <Button fx:id="Print_Account" mnemonicParsing="false" prefHeight="91.0" prefWidth="191.0" text="Print all Accounts" onAction="#handlePrintAccountsAction" />
                         <Button fx:id="Load_File" mnemonicParsing="false" prefHeight="119.0" prefWidth="190.0" text="Load Account from File" GridPane.columnIndex="1" />
                         <Button fx:id="Apply_Interest" mnemonicParsing="false" prefHeight="101.0" prefWidth="190.0" text="Apply Interest and Fees" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                        <Button fx:id="Print_Fees" mnemonicParsing="false" prefHeight="137.0" prefWidth="191.0" text="Print Interest and Fees" GridPane.rowIndex="1" />
+                        <Button fx:id="Print_Fees" mnemonicParsing="false" onAction="#handlePrintFeesAction" prefHeight="137.0" prefWidth="191.0" text="Print Interest and Fees" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>
                </children>
