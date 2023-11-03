@@ -26,23 +26,6 @@ public class Profile implements Comparable<Profile> {
     }
 
     /**
-     * Creates and returns a Profile object from a string array.
-     * The input array is expected to have the date of birth at index 4,
-     * first name at index 2, and last name at index 3.
-     *
-     * @param input The string array containing profile details.
-     * @return A Profile object or null if the input is not valid.
-     */
-    /*public static Profile makeProfile(String[] input) {
-        
-        if (dob.isValid()){
-            return new Profile(input[1], input[2], dob);
-        }else{
-            throw new IllegalArgumentException();
-        }
-    }*/
-
-    /**
      * Retrieves the first name of the profile holder.
      *
      * @return The first name.
