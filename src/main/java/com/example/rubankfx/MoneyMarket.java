@@ -48,30 +48,11 @@ public class MoneyMarket extends Savings {
     }
 
     /**
-     * Constructs and returns a MoneyMarket object based on the provided input data.
-     * The input is expected to have the profile details and balance information.
+     * Constructs and returns a MoneyMarket object based on the provided parameters.
      *
-     * @param input An array containing the required data to create a MoneyMarket instance.
-     *              Typically, the input should have profile data followed by a balance.
-     *              For example: [firstName, lastName, ... , balance]
-     * @return A new MoneyMarket instance if the input is valid; otherwise, null.
-     * @throws IllegalArgumentException if the provided data is not valid for creating a MoneyMarket instance.
+     * @param profile object of the user contains name, and date of birth
+     * @return A new MoneyMarket instance.
      */
-    /*public static MoneyMarket makeMoneyMarket(String input[]) throws NumberFormatException, IndexOutOfBoundsException{
-        Profile profile = Profile.makeProfile(input);
-        if(profile == null){
-            throw new IllegalArgumentException();
-        }
-        Boolean exists = input[0].equals("C") ? false : true;
-        // System.out.println(exists);
-        double balance = exists == true ? Double.parseDouble(input[5]) : 0.0;
-        if(exists == true && balance <= 0){System.out.println("Initial deposit cannot be 0 or negative."); return null;}
-        if(input[0].equals("O")&& balance < 2000){
-            System.out.println("Minimum of $2000 to open a Money Market account.");
-            return null;
-        }
-        return new MoneyMarket(profile, balance);
-    }*/
     public static MoneyMarket makeMoneyMarket(Profile profile, double balance){
         return new MoneyMarket(profile, balance);
     }
