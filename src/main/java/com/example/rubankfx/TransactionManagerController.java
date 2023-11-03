@@ -2,15 +2,22 @@ package com.example.rubankfx;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.*;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
 
 public class TransactionManagerController implements Initializable{
-    public CheckBox Loyalty;
+
     /*
         This area contains all the components from the Open/Close page.
          */
@@ -34,13 +41,17 @@ public class TransactionManagerController implements Initializable{
     @FXML
     private RadioButton OC_MM;
 
+    public CheckBox Loyalty;
+    public Button Open;
+    public Button Close;
+    public Button Clear;
+
     @FXML
     private RadioButton Campus_NB;
     @FXML
     private RadioButton Campus_NW;
     @FXML
     private RadioButton Campus_C;
-    AccountDatabase AccountDatabase = new AccountDatabase();
 
     @FXML
     private void OChandleRadioButtonAction(ActionEvent event) {
@@ -204,17 +215,6 @@ public class TransactionManagerController implements Initializable{
     }
 
 
-    private String getSelectedCampusCode() {
-        if (Campus_NB.isSelected()) {
-            return "0";
-        } else if (Campus_NW.isSelected()) {
-            return "1";
-        } else if (Campus_C.isSelected()) {
-            return "2";
-        }
-        return null;
-    }
-
     private String getSelectedAccountType() {
         if (OC_Checking.isSelected()) {
             return "C";
@@ -225,8 +225,21 @@ public class TransactionManagerController implements Initializable{
         } else if (OC_MM.isSelected()) {
             return "MM";
         } else {
-            return null; // or "None" depending on how you want to handle no selection
+            return null;
         }
+    }
+
+
+
+    private String getSelectedCampusCode() {
+        if (Campus_NB.isSelected()) {
+            return "0";
+        } else if (Campus_NW.isSelected()) {
+            return "1";
+        } else if (Campus_C.isSelected()) {
+            return "2";
+        }
+        return null;
     }
 
 
@@ -279,20 +292,18 @@ public class TransactionManagerController implements Initializable{
         return -1;
     }
 
-
-@FXML
-    private Button Open;
-    @FXML
-    private Button Close;
-    @FXML
-    private Button Clear;
+    private Profile makeProfileDW(Date date) {
+        String firstName = DW_First_Name.getText();
+        String lastName = DW_Last_Name.getText();
+        return new Profile(firstName, lastName, date);
+    }
 
     public void ClearScreen(ActionEvent actionEvent) {
         messageListView.getItems().clear();
     }
 
     @FXML
-    private ListView<String> messageListView;; // Replace with the correct type
+    private ListView<String> messageListView;
 
     //DEPOSIT AND WITHDRAW STUFF
     @FXML
@@ -331,32 +342,127 @@ public class TransactionManagerController implements Initializable{
         }
     }
     @FXML
-    private TextField textField1; // Replace with the correct type
+    public TextField BalanceDW;
+
+    public Button Deposit;
+    @FXML
+    public Button Withdraw;
+
+
+    private String DWAcctdecision() {
+        if (DW_Checking.isSelected()) {
+            return "C";
+        } else if (DW_CC.isSelected()) {
+            return "CC";
+        } else if (DW_Savings.isSelected()) {
+            return "S";
+        } else if (DW_MM.isSelected()) {
+            return "MM";
+        }
+        return null;
+    }
 
     @FXML
-    private Button Deposit;
+    private void deposit(ActionEvent event){
+        String type = DWAcctdecision();
+        if(type == null){
+            addMessageWithdrawView("Please Select an Account type!");
+            return;
+        }
+        double balance;
+        try{
+            balance = Double.parseDouble(BalanceDW.getText());
+        }catch(NumberFormatException e){
+            addMessageWithdrawView("Please enter a valid amount to deposit");
+            return;
+        }
+        LocalDate localDate = DW_DOB.getValue();
+        if (localDate == null) {
+            addMessageWithdrawView("Please enter a valid date! ");
+            return;
+        }
+        Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+        if (!date.isValid()) {
+            addMessageWithdrawView(date.getLastMessage());
+            return;
+        }
+        Profile profile = makeProfileDW(date);
+        Account accountToDeposit = database.getAccountByProfileAndType(profile, type);
+        if(accountToDeposit == null){
+            addMessageWithdrawView("Account does not exist!");
+            return;
+        }
+        else {
+            accountToDeposit.deposit(balance);
+            addMessageWithdrawView("Deposit successful");
+        }
+    }
+
     @FXML
-    private Button Withdraw;
+    private void withDraw(ActionEvent event){
+        String type = DWAcctdecision();
+        double balance;
+        if(type == null){
+            addMessageToListView("Please Select an Account type!");
+            return;
+        }
+        try {
+            balance = Double.parseDouble(BalanceDW.getText());
+        }catch(NumberFormatException e){
+            addMessageWithdrawView("Please enter a valid account to withdraw!");
+            return;
+        }
+        LocalDate localDate = DW_DOB.getValue();
+        if (localDate == null) {
+            addMessageWithdrawView("Please enter a valid date! ");
+            return;
+        }
+        Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
+        if (!date.isValid()) {
+            addMessageWithdrawView(date.getLastMessage());
+            return;
+        }
+        Profile profile = makeProfileDW(date);
+        Account accountToWithdraw = database.getAccountByProfileAndType(profile, type);
+        if(accountToWithdraw == null){
+            addMessageWithdrawView("Account does not exist!");
+        }
+        else {
+            accountToWithdraw.withdraw(balance);
+            String returned = accountToWithdraw.getHelperMessage();
+            addMessageWithdrawView(returned);
+        }
+    }
+
+
+    private void addMessageWithdrawView(String message) {
+        withdrawView.getItems().add(message);
+        withdrawView.scrollTo(withdrawView.getItems().size() - 1);
+    }
 
     public ToggleGroup getCampusToggleGroup() {
         return campusToggleGroup;
     }
 
-
+    @FXML
+    private ListView<String> withdrawView; // Replace with the correct type
 
     @FXML
     private ListView<String> accountsListView; // Replace with the correct type
 
     @FXML
     private void handlePrintAccountsAction(ActionEvent event) {
+        database.Sort();
         Account[] allAccounts = database.getAllAccounts();
         accountsListView.getItems().clear();
-        if(allAccounts == null){
+        if(allAccounts == null || allAccounts.length == 0){
             accountsListView.getItems().add("Account Database is Empty! ");
             return;
         }
         for (Account account : allAccounts) {
-            accountsListView.getItems().add(account.toString());
+            if(account != null) {
+                accountsListView.getItems().add(account.toString());
+            }
         }
     }
 
@@ -371,7 +477,60 @@ public class TransactionManagerController implements Initializable{
     private Button Print_Fees;
 
     @FXML
-    private ListView<String> listView3; // Replace with the correct type
+    private void applyInterest(){
+        database.updateBalances();
+    }
+
+    @FXML
+    private void handlePrintFeesAction(ActionEvent event) {
+        database.Sort();
+        accountsListView.getItems().clear();
+        List<String> Infolist = database.getInterestInfo();
+        if(Infolist == null || Infolist.isEmpty()){
+            accountsListView.getItems().add("Account Database is Empty! ");
+            return;
+        }
+        for (String interestInfo: Infolist) {
+            if(interestInfo != null) {
+                accountsListView.getItems().add(interestInfo);
+            }
+        }
+    }
+
+
+    @FXML
+    private void onLoadFileClick(ActionEvent event) {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Open Account Data File");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Text Files", "*.txt"),
+                new FileChooser.ExtensionFilter("All Files", "*.*"));
+        File selectedFile = fileChooser.showOpenDialog(((Node)event.getSource()).getScene().getWindow());
+
+        if (selectedFile != null) {
+            loadAccountsFromFile(selectedFile);
+        }
+    }
+
+
+    private void loadAccountsFromFile(File file) {
+        try {
+            List<String> lines = Files.readAllLines(file.toPath(), StandardCharsets.UTF_8);
+            for (String line : lines) {
+                Account account = parseAccountLine(line);
+                if (account != null) {
+                    database.open(account);
+                }
+            }
+            addMessageToListView("Accounts loaded successfully!");
+        } catch (IOException e) {
+            addMessageToListView("Error reading file: " + e.getMessage());
+        }
+    }
+
+    private Account parseAccountLine(String line) {
+        return null;
+    }
 
 
     @Override
@@ -380,6 +539,10 @@ public class TransactionManagerController implements Initializable{
         Campus_NB.setToggleGroup(campusToggleGroup);
         Campus_NW.setToggleGroup(campusToggleGroup);
         Campus_C.setToggleGroup(campusToggleGroup);
+
+        Apply_Interest.setOnAction(event -> {
+            applyInterest();
+        });
     }
 
 }
