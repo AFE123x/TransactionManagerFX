@@ -26,7 +26,6 @@ public class MoneyMarket extends Savings {
      * Money market accounts has a default loyalty status as True.
      * @param holder The profile of the account holder.
      * @param balance The initial balance of the account.
-     * @param withdrawal The initial number of withdrawals made.
      */
     public MoneyMarket(Profile holder, double balance) {
         super(holder, balance, true);
@@ -51,13 +50,12 @@ public class MoneyMarket extends Savings {
      * Constructs and returns a MoneyMarket object based on the provided parameters.
      *
      * @param profile object of the user contains name, and date of birth
-     * @param balance double an initial balance the account must be created with
+     * @param balance double pertaining to initial balance of the account to be created.
      * @return A new MoneyMarket instance.
      */
     public static MoneyMarket makeMoneyMarket(Profile profile, double balance){
         return new MoneyMarket(profile, balance);
     }
-    
 
     /**
      * Calculates the monthly fee for the Money Market account.
@@ -74,7 +72,7 @@ public class MoneyMarket extends Savings {
         isLoyal = true;
         return 0;
     }
-    
+
     /**
      * Deposits the specified amount into the account and checks if the updated balance qualifies the account as loyal.
      * If the balance reaches or exceeds a threshold (in this case, $2000), the account is marked as loyal.
@@ -88,7 +86,7 @@ public class MoneyMarket extends Savings {
             isLoyal = true;
         }
     }
-    
+
     /**
      * Withdraws the specified amount from the Money Market account.
      * @param amount The amount to be withdrawn.
@@ -103,9 +101,20 @@ public class MoneyMarket extends Savings {
             }
         }
         else{
-            System.out.printf("%s(CC) Withdraw - insufficient fund.",getProfile().toString(),GetType());
+            helper = "Cannot Withdraw - insufficient fund."+ this.getProfile().toString() + this.GetType();
         }
 
+    }
+
+    String helper;
+
+    /**
+     * Retrieves the helper message. This message is typically used to provide feedback on the last operation performed.
+     *
+     * @return the current helper message as a String.
+     */
+    public String getHelper() {
+        return helper;
     }
 
     /**
@@ -124,7 +133,7 @@ public class MoneyMarket extends Savings {
     }
 
     /** Returns the type of the Account
-     * @returns A string representing the type of the account, in this case "MM"
+     * @return A string representing the type of the account, in this case "MM"
      */
     @Override
     public String GetType(){
