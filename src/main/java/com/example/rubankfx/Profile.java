@@ -1,91 +1,112 @@
 package com.example.rubankfx;
+import java.text.DecimalFormat;
 
 /**
- * The Profile class represents an individual's profile with attributes such as first name, last name, and date of birth.
- * It provides functionalities to create a profile object from a string array and compare profiles.
+ * Represents a Savings account type which extends the base Account class.
+ * The Savings account has properties that determine if the account holder
+ * is loyal, the interest rates for the savings account, a bonus interest rate
+ * for loyal customers, a monthly fee for balances less than the minimum
+ * balance, and the minimum balance required to avoid a monthly fee.
  *
  * @author Digvijay Singh, Arun Felix
  */
-public class Profile implements Comparable<Profile> {
+public class Savings extends Account{
 
-    private String fname; // First name of the profile holder
-    private String lname; // Last name of the profile holder
-    private Date dob;     // Date of birth of the profile holder
+    /** Represents if the account holder has loyal customer status */
+    protected boolean isLoyal;
+
+    /** Constant interest rate for the savings account */
+    private static final double INTEREST_RATE = 0.04;
+
+    /** Bonus interest rate for loyal customers */
+    protected static final double LOYALTY_BONUS = 0.0025;
+
+    /** Monthly fee if the required balance is less than $500*/
+    private static final double FEE = 25;
+
+    /** Minimum balance required to avoid monthly fee */
+    private static final double MIN_BALANCE_REQUIRED = 500.0;
+
 
     /**
-     * Initializes a new Profile object with a specified first name, last name, and date of birth.
-     *
-     * @param fname The first name for the profile.
-     * @param lname The last name for the profile.
-     * @param dob The date of birth for the profile.
+     * Creates a new Savings account with the specified holder, balance and loyalty status.
+     * @param holder The profile of the account holder.
+     * @param balance The initial balance of the account.
+     * @param isLoyal The loyalty status of the account holder.
      */
-    public Profile(String fname, String lname, Date dob) {
-        this.fname = fname;
-        this.lname = lname;
-        this.dob = dob;
+    public Savings(Profile holder, double balance, boolean isLoyal) {
+        super(holder, balance);
+        this.isLoyal = isLoyal;
     }
 
     /**
-     * Retrieves the first name of the profile holder.
-     *
-     * @return The first name.
+     * A method that Parses a String array and creates a Savings object.
+     * @param profile The profile of the user which is a profile object.
+     * @return A Savings object.
      */
-    public String getFname() {
-        return fname;
+    public static Savings makeSavings(Profile profile, double balance,boolean isLoyal) throws NumberFormatException{
+
+        return new Savings(profile, balance, isLoyal);
+
     }
 
     /**
-     * Retrieves the last name of the profile holder.
-     *
-     * @return The last name.
-     */
-    public String getLname() {
-        return lname;
-    }
-
-    /**
-     * Retrieves the date of birth of the profile holder.
-     *
-     * @return The date of birth.
-     */
-    public Date getDob() {
-        return dob;
-    }
-
-    public String toString(){
-        //John Doe 2/19/2000
-        return fname + " " + lname + " " + dob.toString();
-    }
-    /**
-     * Compares the current profile to another profile object.
-     * The method currently returns 0, indicating that profiles are treated as equal.
-     * This should be enhanced to provide a meaningful comparison.
-     *
-     * @param profile The profile to be compared.
-     * @return Currently returns 0.
+     * Calculates the monthly interest for the Savings account.
+     * @return The monthly interest rounded to 2 decimal places.
      */
     @Override
-    public int compareTo(Profile profile) {
-        int firstcompare = this.lname.toLowerCase().compareTo(profile.getLname().toLowerCase());
-        if(firstcompare != 0){
-            return firstcompare;
-        }
-        firstcompare = this.fname.toLowerCase().compareTo(profile.getFname().toLowerCase());
-        if(firstcompare != 0){
-            return firstcompare;
-        }
-        return this.dob.compareTo(profile.dob);
+    public double monthlyInterest() {
+        double unroundedInterest = balance * (INTEREST_RATE + (isLoyal ? LOYALTY_BONUS : 0));
+
+        DecimalFormat decimalFormat = new DecimalFormat("#0.00");
+        String formattedInterest = decimalFormat.format(unroundedInterest);
+
+        return Double.parseDouble(formattedInterest);
+    }
+    /**
+     * Calculates the monthly fee for the Savings account.
+     * @return The monthly fee.
+     */
+    @Override
+    public double monthlyFee() {
+        return balance >= MIN_BALANCE_REQUIRED ? 0 : FEE;
     }
 
+    /**
+     * @return "S" to specify account type.
+     */
     @Override
-    public boolean equals(Object obj) {
-        if(obj == null){
-            return false;
-        }
-        if(obj instanceof Profile){
-            Profile temp = (Profile)obj;
-            return this.compareTo(temp) == 0;
-        }
-        return false;
+    public String GetType(){
+        return "S";
     }
+
+
+    /**
+     * Returns a string representation of the Savings account.
+     * @return A string representing the Savings account.
+     */
+    @Override
+    public String toString() {
+        //Savings::Jane Doe 10/1/1995::Balance $1,000.00
+        if(!isLoyal){
+            return "Savings::" + holder + "::Balance $" + getbalance();
+        }
+        else{
+            return "Savings::" + holder + "::Balance $" + getbalance() + "::is loyal";
+        }
+
+    }
+    /**
+     * Deducts the monthly fee and interest from the account balance.
+     * The method subtracts the monthly fee and the monthly interest from the account balance
+     * to reflect the changes that occur during a monthly withdrawal operation.
+     * The monthly fee is deducted first, followed by the monthly interest (if applicable).
+     * If the account has a loyalty bonus, the interest will be adjusted accordingly.
+     */
+    @Override
+    public void applyWithdraw() {
+        balance += monthlyInterest() -  monthlyFee();
+    }
+
+
 }
