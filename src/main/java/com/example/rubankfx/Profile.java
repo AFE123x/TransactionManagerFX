@@ -8,9 +8,14 @@ package com.example.rubankfx;
  */
 public class Profile implements Comparable<Profile> {
 
-    private String fname; // First name of the profile holder
-    private String lname; // Last name of the profile holder
-    private Date dob;     // Date of birth of the profile holder
+    /**First name of the profile holder*/
+    private String fname;
+
+    /** Last name of the profile holder*/
+    private String lname;
+
+    /** Date of birth of the profile holder*/
+    private Date dob;
 
     /**
      * Initializes a new Profile object with a specified first name, last name, and date of birth.
@@ -52,6 +57,12 @@ public class Profile implements Comparable<Profile> {
         return dob;
     }
 
+    /**
+     * Returns a string representation of the Profile, which includes the first name, last name, and date of birth.
+     * The format is: "FirstName LastName DateOfBirth", where DateOfBirth is provided by the {@code toString} method of the {@code Date} class.
+     *
+     * @return a string representation of the Profile.
+     */
     public String toString(){
         //John Doe 2/19/2000
         return fname + " " + lname + " " + dob.toString();
@@ -77,6 +88,13 @@ public class Profile implements Comparable<Profile> {
         return this.dob.compareTo(profile.dob);
     }
 
+    /**
+     * Checks if this Profile is equal to another object. Equality is determined by comparing the state of this Profile to the state of the other object.
+     * If the other object is also a Profile and their states match (based on {@code compareTo}), they are considered equal.
+     *
+     * @param obj the reference object with which to compare.
+     * @return {@code true} if this object is the same as the {@code obj} argument; {@code false} otherwise.
+     */
     @Override
     public boolean equals(Object obj) {
         if(obj == null){

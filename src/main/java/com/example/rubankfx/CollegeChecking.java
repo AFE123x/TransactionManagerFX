@@ -40,8 +40,6 @@ public class CollegeChecking extends Checking {
             this.name = name;
         }
     }
-
-    
     //0 – New Brunswick, 1 – Newark, 2 – Camden
 
     /** Variable storing the associated campus for the account */
@@ -73,43 +71,16 @@ public class CollegeChecking extends Checking {
     }
 
     /**
-     * Creates and returns a new CollegeChecking instance based on the provided input data.
-     * The input array is expected to contain account-related data, such as holder details, balance, and campus code.
-     * If any input data is missing or invalid, this method may return null or throw an exception.
+     * Creates a new CollegeChecking account with the specified profile, balance, and campus code.
+     * This static factory method enforces validation on the campus code before creating a new account.
      *
-     * @param input An array of strings containing account-related data.
-     *              The first element is expected to be an account type identifier ("C" for CollegeChecking).
-     *              Subsequent elements are expected to contain profile details, balance, and campus code.
-     * @return A new CollegeChecking instance constructed from the input data, or null if input data is invalid.
-     * @throws NumberFormatException If there's an error in parsing the balance from the input data.
-     * @throws IndexOutOfBoundsException If the input data array is shorter than expected.
+     * @param profile     the profile of the account holder including personal details such as name and date of birth.
+     * @param balance     the initial balance to be set for the new CollegeChecking account.
+     * @param campusCode  the campus code associated with the account, which must be within valid range.
+     * @return a new instance of CollegeChecking account with the specified details.
+     * @throws IllegalArgumentException if the provided campus code is outside of the valid range (0 to 2).
      */
-    /*public static CollegeChecking makeCollegeChecking(String [] input) throws NumberFormatException, IndexOutOfBoundsException{
-        Profile profile = Profile.makeProfile(input);
-        if(profile == null){
-            return null;
-        }
-
-        if(!profile.getDob().checkCollegeCheckingValidity()){
-
-            return null;
-        }
-        Boolean exists = input[0].equals("C") ? false : true;
-        // System.out.println(exists);
-        double tempbalance = exists == true ? Double.parseDouble(input[5]) : 0.0;
-        String tempcampusCode = input[0].equals("O") ? input[6] : null;
-        if(exists == true && tempbalance <= 0){System.out.println("Initial deposit cannot be 0 or negative."); return null;}
-        if(!input[0].equals("C")){
-            int jahr = Integer.parseInt(input[6]);
-            if(jahr < 0 || jahr > 2){System.out.println("Invalid campus code."); return null;}
-        }
-        else{
-            tempcampusCode = "_";
-        }
-        return  new CollegeChecking(profile, tempbalance, tempcampusCode);
-    }*/
-
-     public static CollegeChecking makeCollegeChecking(Profile profile, double balance, int campusCode)
+    public static CollegeChecking makeCollegeChecking(Profile profile, double balance, int campusCode)
             throws IllegalArgumentException {
 
         if (campusCode < 0 || campusCode > 2) {
@@ -119,7 +90,6 @@ public class CollegeChecking extends Checking {
         return new CollegeChecking(profile, balance, campusCode);
     }
 
-    
     /**
      * Returns the monthly interest added to the account.
      *
@@ -151,7 +121,6 @@ public class CollegeChecking extends Checking {
      * @return a string representing the type of the account
      */
     @Override
-
     public String GetType(){
         return "CC";
     }
