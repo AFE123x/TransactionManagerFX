@@ -27,25 +27,11 @@ public class Checking extends Account {
     }
 
     /**
-     * Creates and returns a new Checking instance based on the provided input data.
-     * If any input data is missing or invalid, this method may return null or print an error message.
+     * Constructs a new checking account with the specified holder and balance.
      *
-     * @param input An array of strings containing account-related data.
-     * @return A new Checking instance constructed from the input data, or null if input data is invalid.
-     * @throws NumberFormatException If there's an error in parsing the balance from the input data.
-     * @throws IndexOutOfBoundsException If the input data array is shorter than expected.
-     * @throws NullPointerException If any required data is missing.
+     * @param holder The profile of the account holder.
+     * @param balance The initial balance of the account.
      */
-    /*public static Checking makeChecking(String [] input) throws NumberFormatException, IndexOutOfBoundsException, NullPointerException{
-        Profile profile = Profile.makeProfile(input);
-        boolean exists = !input[0].equals("C");
-        // System.out.println(exists);
-        double balance = exists ? Double.parseDouble(input[5]) : 0.0;
-
-        if(balance <= 0 && exists){System.out.println("Initial deposit cannot be 0 or negative.");}
-        return (!exists || balance > 0 )? new Checking(profile,balance) : null;
-    }*/
-
     public static Checking makeChecking(Profile profile, double balance) throws Exception {
 
         return new Checking(profile, balance);
@@ -97,6 +83,10 @@ public class Checking extends Account {
         return "Checking::" + holder + "::Balance $" + getbalance();
     }
 
+    /**
+     * Applies the withdrawal logic specific to this account type.
+     * For the Checking account, this method updates the balance by adding monthly interest and subtracting monthly fees.
+     */
     @Override
     public void applyWithdraw() {
         balance +=  monthlyInterest() - monthlyFee();
