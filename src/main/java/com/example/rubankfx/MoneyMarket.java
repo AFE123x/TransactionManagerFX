@@ -51,6 +51,7 @@ public class MoneyMarket extends Savings {
      * Constructs and returns a MoneyMarket object based on the provided parameters.
      *
      * @param profile object of the user contains name, and date of birth
+     * @param balance double an initial balance the account must be created with
      * @return A new MoneyMarket instance.
      */
     public static MoneyMarket makeMoneyMarket(Profile profile, double balance){
@@ -73,6 +74,13 @@ public class MoneyMarket extends Savings {
         isLoyal = true;
         return 0;
     }
+    
+    /**
+     * Deposits the specified amount into the account and checks if the updated balance qualifies the account as loyal.
+     * If the balance reaches or exceeds a threshold (in this case, $2000), the account is marked as loyal.
+     *
+     * @param amount the amount to be deposited into the account; must be a positive value.
+     */
     @Override
     public void deposit(double amount){
         balance += amount;
@@ -80,6 +88,7 @@ public class MoneyMarket extends Savings {
             isLoyal = true;
         }
     }
+    
     /**
      * Withdraws the specified amount from the Money Market account.
      * @param amount The amount to be withdrawn.
