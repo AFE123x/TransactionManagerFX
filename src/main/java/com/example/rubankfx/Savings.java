@@ -41,25 +41,9 @@ public class Savings extends Account{
 
     /**
      * A method that Parses a String array and creates a Savings object.
-     * @param input A string Array containing full name, date of birth, balance and loyalty. Varies based on User operation
-     * @return A Savings object if parsing was successful. null otherwise.
-     * @throws NumberFormatException if the number inputted by client is invalid
-     * @throws IndexOutOfBoundsException if inadequate arguments were provided.
+     * @param profile The profile of the user which is a profile object.
+     * @return A Savings object.
      */
-    /*public static Savings makeSavings(String [] input) throws NumberFormatException, IndexOutOfBoundsException{
-
-        Profile profile = Profile.makeProfile(input);
-        if(profile == null){throw new IllegalArgumentException();}
-        boolean isLoyal;
-        boolean exists = !input[0].equals("C");
-        // System.out.println(exists);
-        double balance = exists? Double.parseDouble(input[5]) : 0.0;
-        // System.out.println(exists);
-        if(exists && balance <= 0){System.out.println("Initial deposit cannot be 0 or negative."); return null;};
-        isLoyal = input[0].equals("O") ? Integer.parseInt(input[6]) == 1 : false;
-        return new Savings(profile, balance, isLoyal);
-
-    }*/
     public static Savings makeSavings(Profile profile, double balance,boolean isLoyal) throws NumberFormatException{
 
         return new Savings(profile, balance, isLoyal);
@@ -95,14 +79,7 @@ public class Savings extends Account{
     public String GetType(){
         return "S";
     }
-    /**
-     * Retrieves the loyalty bonus associated with the Savings account.
-     *
-     * @return the loyal customer bonus as a percentage
-     */
-    protected double getLoyaltyBonus() {
-        return LOYALTY_BONUS;
-    }
+
 
     /**
      * Returns a string representation of the Savings account.
