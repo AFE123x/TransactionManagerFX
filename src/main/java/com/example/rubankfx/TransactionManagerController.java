@@ -722,6 +722,7 @@ public class TransactionManagerController implements Initializable{
     @FXML
     private void onLoadFileClick(ActionEvent event) {
         FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
         fileChooser.setTitle("Open Account Data File");
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Text Files", "*.txt"),
@@ -772,9 +773,9 @@ public class TransactionManagerController implements Initializable{
      * @return The Account created from the line, or {@code null} if the line could not be parsed into an account.
      */
     private Account parseAccountLine(String line) {
-
         String[] tokens = line.split(",");
         if (tokens.length < 5) {
+//            addMessageAccountsView("-" + line);
             addMessageAccountsView("Incomplete information to add the account");
             return null;
         }
