@@ -135,10 +135,8 @@ public class TransactionManagerController implements Initializable{
      * @param event The event that triggered this method call, typically a button press indicating
      *              the user's intent to open a new account.
      */
-    @FXML
-    void OpenAccount(ActionEvent event){
+    public void OpenAccount(ActionEvent event){
         try {
-            boolean added;
             LocalDate localDate = OC_DOB.getValue();
             if (localDate == null) {
                 messageListView.getItems().add("Please enter a valid date! ");
@@ -149,91 +147,138 @@ public class TransactionManagerController implements Initializable{
                 messageListView.getItems().add(date.getLastMessage());
                 return;
             }
+            if(OC_First_Name.getText().isEmpty() || OC_Last_Name.getText().isEmpty()){
+                messageListView.getItems().add("Please enter a name! ");
+                return;
+            }
+            if(InitDeposit.getText().isEmpty()){
+                addMessageToListView("Please add a balance");
+                return;
+            }
             Profile profile = makeProfile(date);
             double balance;
-            try {
-                balance = Double.parseDouble(InitDeposit.getText());
+            try{ balance = parseInitialDeposit(InitDeposit.getText());
                 if (balance <= 0) {
                     messageListView.getItems().add("Initial deposit must be greater than zero!");
                     return;
                 }
-            } catch (NumberFormatException e) {
-                messageListView.getItems().add("Please enter a valid number for initial deposit");
+            }catch(NumberFormatException e){ addMessageToListView("Enter a valid number");
                 return;
             }
             int decision = OCAcctdecision();
             switch (decision) {
-                case 0: // Checking Account
-                    Checking checkingAccount = Checking.makeChecking(profile, balance);
-                    added = database.open(checkingAccount);
-                    if (!added && database.getLastMessage().equals("AE")) {
-                        messageListView.getItems().add("Account already exists!");
-                    }
-                    else {
-                        messageListView.getItems().add("Account opened successfully!");
-                    }
+                case 0: openCheckingAccount(profile, balance);
                     break;
-                case 1: //College Checking Account
-                    Integer campusCodeInt = validateAndGetCampusCode();
-                    if (campusCodeInt == null) {
-                        return; // Exit since either no code was selected or it was invalid.
-                    }
-                    if (!date.checkCollegeCheckingValidity()) {
-                        messageListView.getItems().add(date.getLastMessage());
-                        return;
-                    }
-                    try {
-                        CollegeChecking collegeChecking = CollegeChecking.makeCollegeChecking(profile, balance, campusCodeInt);
-                        added = database.open(collegeChecking);
-                        if (!added && database.getLastMessage().equals("AE")) {
-                            messageListView.getItems().add("Account already exists!");
-                        }
-                        else {
-                            messageListView.getItems().add("Account opened successfully!");
-                        }
-                    } catch (IllegalArgumentException e) {
-                        showAlert("Error", e.getMessage());
-                    }
+                case 1: openCollegeCheckingAccount(profile, balance, date);
                     break;
-                case 2: // Savings Account
-                    boolean loyal;
-                    loyal = Loyalty.isSelected();
-                    try{
-                        Savings Saving = Savings.makeSavings(profile,balance,loyal);
-                        added = database.open(Saving);
-                        if(!added && database.getLastMessage().equals("AE")){
-                            messageListView.getItems().add("Account already exists!");
-                        }
-                        else {
-                            messageListView.getItems().add("Account opened successfully!");
-                        }
-                    }catch (IllegalArgumentException e){
-                        showAlert("Error",e.getMessage());
-                    }
+                case 2: boolean loyal = Loyalty.isSelected();
+                    openSavingsAccount(profile, balance, loyal);
                     break;
-                case 3: //Money Market
-                    if(balance < 2000) {
-                        messageListView.getItems().add("Balance cannot be below 2000!");
-                        return;
-                    }
-                    try{
-                        MoneyMarket Money = MoneyMarket.makeMoneyMarket(profile, balance);
-                        added = database.open(Money);
-                        if(!added && database.getLastMessage().equals("AE")){
-                            messageListView.getItems().add("Account already exists!");
-                        }
-                        else {
-                            messageListView.getItems().add("Account opened successfully!");
-                        }
-                    }
-                    catch (IllegalArgumentException e){
-                        showAlert("Error",e.getMessage());
-                    }
+                case 3: openMoneyMarketAccount(profile,balance);
                     break;
+                default: addMessageToListView("Please select an account type!");break;
             }
-        }catch(Exception e) {
+        } catch (Exception e) {
             showAlert("Error", e.getMessage());
         }
+    }
+
+    /**
+     * Attempts to open a new Checking account in the bank database.
+     * @param profile the customer's profile information
+     * @param balance the initial deposit balance for the account
+     */
+    private void openCheckingAccount(Profile profile, double balance) {
+        Checking checkingAccount = Checking.makeChecking(profile, balance);
+        boolean added = database.open(checkingAccount);
+        handleAccountOpeningResult(added);
+    }
+
+    /**
+     * Attempts to open a new College Checking account in the bank database with a campus code.
+     * If the campus code is invalid or the account's date is not valid for a college checking account, the process is aborted.
+     * @param profile the customer's profile
+     * @param balance the initial deposit balance for the account
+     * @param date the date to validate college checking account eligibility
+     */
+    private void openCollegeCheckingAccount(Profile profile, double balance,Date date) {
+        Integer campusCodeInt = validateAndGetCampusCode();
+        if (campusCodeInt == null) {
+            return; // Exit since either no code was selected or it was invalid.
+        }
+        if (!date.checkCollegeCheckingValidity()) {
+            messageListView.getItems().add(date.getLastMessage());
+            return;
+        }
+        try {
+            CollegeChecking collegeChecking = CollegeChecking.makeCollegeChecking(profile, balance, campusCodeInt);
+            boolean added = database.open(collegeChecking);
+            handleAccountOpeningResult(added);
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", "Please enter all details");
+        }
+    }
+
+    /**
+     * Attempts to open a new Savings account in the bank database, flagging the account as loyal if applicable.
+     * @param profile the customer's profile information
+     * @param balance the initial deposit balance for the account
+     * @param loyal a boolean flag indicating if the account is a loyal account
+     */
+    private void openSavingsAccount(Profile profile, double balance, boolean loyal) {
+        try {
+            Savings savingAccount = Savings.makeSavings(profile, balance, loyal);
+            boolean added = database.open(savingAccount);
+            handleAccountOpeningResult(added);
+        } catch (IllegalArgumentException e) {
+            showAlert("Error", e.getMessage());
+        }catch (DateTimeParseException e){
+            showAlert("Error", "bad date format");
+        }
+    }
+
+    /**
+     * Attempts to open a new Money Market account in the bank database.
+     * If the initial deposit is less than the required minimum, the process is aborted.
+     * @param profile the customer's profile information
+     * @param balance the initial deposit balance for the account
+     */
+    private void openMoneyMarketAccount(Profile profile, double balance) {
+        if(balance < 2000) {
+            messageListView.getItems().add("Balance cannot be below 2000!");
+            return;
+        }
+        try {
+            MoneyMarket moneyMarket = MoneyMarket.makeMoneyMarket(profile, balance);
+            boolean added = database.open(moneyMarket);
+            handleAccountOpeningResult(added);
+        }
+        catch (IllegalArgumentException e) {
+            showAlert("Error", e.getMessage());
+        }
+    }
+
+    /**
+     * Handles the result of attempting to open an account, displaying an appropriate message.
+     * @param added a boolean indicating if the account was successfully added to the database
+     */
+    private void handleAccountOpeningResult(boolean added) {
+        if (!added && database.getLastMessage().equals("AE")) {
+            messageListView.getItems().add("Account already exists!");
+        } else {
+            messageListView.getItems().add("Account opened successfully!");
+        }
+    }
+
+    /**
+     * Parses the initial deposit amount from a string.
+     * @param initialDepositText the string representing the initial deposit
+     * @return the parsed deposit amount as a double
+     * @throws NumberFormatException if the initial deposit text cannot be parsed as a double
+     */
+    private double parseInitialDeposit(String initialDepositText) throws NumberFormatException {
+        double balance = Double.parseDouble(initialDepositText);
+        return balance;
     }
 
     /**
