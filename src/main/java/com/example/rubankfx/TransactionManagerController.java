@@ -601,39 +601,40 @@ public class TransactionManagerController implements Initializable{
      * @param event The action event that occurred.
      */
     @FXML
-    private void deposit(ActionEvent event){
+    private boolean deposit(ActionEvent event){
         String type = DWAcctdecision();
         if(type == null){
             addMessageWithdrawView("Please Select an Account type!");
-            return;
+            return false;
         }
         double balance;
         try{
             balance = Double.parseDouble(BalanceDW.getText());
         }catch(NumberFormatException e){
             addMessageWithdrawView("Please enter a valid amount to deposit");
-            return;
+            return false;
         }
         LocalDate localDate = DW_DOB.getValue();
         if (localDate == null) {
             addMessageWithdrawView("Please enter a valid date! ");
-            return;
+            return false;
         }
         Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
         if (!date.isValid()) {
             addMessageWithdrawView(date.getLastMessage());
-            return;
+            return false;
         }
         Profile profile = makeProfileDW(date);
         Account accountToDeposit = database.getAccountByProfileAndType(profile, type);
         if(accountToDeposit == null){
             addMessageWithdrawView("Account does not exist!");
-            return;
+            return false;
         }
         else {
             accountToDeposit.deposit(balance);
             addMessageWithdrawView("Deposit successful");
         }
+        return true;
     }
 
     /**
@@ -641,41 +642,44 @@ public class TransactionManagerController implements Initializable{
      * and performs a withdrawal.
      *
      * @param event The action event that occurred.
+     * @return true/false depending on whether money was withdrawn successfully.
      */
     @FXML
-    private void withDraw(ActionEvent event){
+    private boolean withDraw(ActionEvent event){
         String type = DWAcctdecision();
         double balance;
         if(type == null){
             addMessageToListView("Please Select an Account type!");
-            return;
+            return false;
         }
         try {
             balance = Double.parseDouble(BalanceDW.getText());
         }catch(NumberFormatException e){
             addMessageWithdrawView("Please enter a valid account to withdraw!");
-            return;
+            return false;
         }
         LocalDate localDate = DW_DOB.getValue();
         if (localDate == null) {
             addMessageWithdrawView("Please enter a valid date! ");
-            return;
+            return false;
         }
         Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
         if (!date.isValid()) {
             addMessageWithdrawView(date.getLastMessage());
-            return;
+            return false;
         }
         Profile profile = makeProfileDW(date);
         Account accountToWithdraw = database.getAccountByProfileAndType(profile, type);
         if(accountToWithdraw == null){
             addMessageWithdrawView("Account does not exist!");
+            return false;
         }
         else {
             accountToWithdraw.withdraw(balance);
             String returned = accountToWithdraw.getHelperMessage();
             addMessageWithdrawView(returned);
         }
+        return true;
     }
 
 
