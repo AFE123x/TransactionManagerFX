@@ -29,10 +29,10 @@ public class Checking extends Account {
     /**
      * Constructs a new checking account with the specified holder and balance.
      *
-     * @param holder The profile of the account holder.
+     * @param profile The profile of the account holder.
      * @param balance The initial balance of the account.
      */
-    public static Checking makeChecking(Profile profile, double balance) throws Exception {
+    public static Checking makeChecking(Profile profile, double balance){
 
         return new Checking(profile, balance);
     }

@@ -10,6 +10,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.scene.control.ToggleGroup;
@@ -103,26 +104,43 @@ public class TransactionManagerController implements Initializable{
     private void OChandleRadioButtonAction(ActionEvent event) {
         RadioButton selectedRadioButton = (RadioButton) event.getSource();
         if (selectedRadioButton == OC_Checking) {
+            clearcampus();
             OC_CC.setSelected(false);
             OC_Savings.setSelected(false);
             OC_MM.setSelected(false);
+            Loyalty.setSelected(false);
         } else if (selectedRadioButton == OC_CC) {
             OC_Checking.setSelected(false);
             OC_Savings.setSelected(false);
             OC_MM.setSelected(false);
+            Loyalty.setSelected(false);
         } else if (selectedRadioButton == OC_Savings) {
+            clearcampus();
             OC_Checking.setSelected(false);
             OC_CC.setSelected(false);
             OC_MM.setSelected(false);
+            clearcampus();
         } else if (selectedRadioButton == OC_MM) {
             OC_Checking.setSelected(false);
             OC_CC.setSelected(false);
             OC_Savings.setSelected(false);
+            clearcampus();
+            Loyalty.setSelected(false);
         }
         Campus_NB.setDisable(!OC_CC.isSelected());
         Campus_NW.setDisable(!OC_CC.isSelected());
         Campus_C.setDisable(!OC_CC.isSelected());
     }
+
+    /**
+     * Clears the campus radiobuttons based on Account selection.
+     */
+    private void clearcampus(){
+        Campus_NB.setSelected(false);
+        Campus_NW.setSelected(false);
+        Campus_C.setSelected(false);
+    }
+
 
     /**
      * Attempts to open a new account based on the input provided by the user.
@@ -135,35 +153,35 @@ public class TransactionManagerController implements Initializable{
      * @param event The event that triggered this method call, typically a button press indicating
      *              the user's intent to open a new account.
      */
-    public void OpenAccount(ActionEvent event){
+    public boolean OpenAccount(ActionEvent event){
         try {
             LocalDate localDate = OC_DOB.getValue();
             if (localDate == null) {
                 messageListView.getItems().add("Please enter a valid date! ");
-                return;
+                return false;
             }
             Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
             if (!date.isValid()) {
                 messageListView.getItems().add(date.getLastMessage());
-                return;
+                return false;
             }
             if(OC_First_Name.getText().isEmpty() || OC_Last_Name.getText().isEmpty()){
                 messageListView.getItems().add("Please enter a name! ");
-                return;
+                return false;
             }
             if(InitDeposit.getText().isEmpty()){
                 addMessageToListView("Please add a balance");
-                return;
+                return false;
             }
             Profile profile = makeProfile(date);
             double balance;
             try{ balance = parseInitialDeposit(InitDeposit.getText());
                 if (balance <= 0) {
                     messageListView.getItems().add("Initial deposit must be greater than zero!");
-                    return;
+                    return false;
                 }
             }catch(NumberFormatException e){ addMessageToListView("Enter a valid number");
-                return;
+                return false;
             }
             int decision = OCAcctdecision();
             switch (decision) {
@@ -176,11 +194,13 @@ public class TransactionManagerController implements Initializable{
                     break;
                 case 3: openMoneyMarketAccount(profile,balance);
                     break;
-                default: addMessageToListView("Please select an account type!");break;
+                default: addMessageToListView("Please select an account type!"); return false;
             }
         } catch (Exception e) {
             showAlert("Error", e.getMessage());
+            return false;
         }
+        return true;
     }
 
     /**
