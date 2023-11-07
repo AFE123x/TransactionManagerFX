@@ -93,15 +93,17 @@ public class MoneyMarket extends Savings {
      */
     @Override
     public void withdraw(double amount) {
-        if(this.balance - amount > 0){
+        if(this.balance - amount >= 0){
             balance -= amount;
-            withdrawal++;
             if(balance < 2000){
-                isLoyal = false;
+                this.isLoyal = false;
             }
+            this.helper = "Withdrawal Successful! ";
+            return;
         }
         else{
-            helper = "Cannot Withdraw - insufficient fund."+ this.getProfile().toString() + this.GetType();
+            this.helper = "Cannot Withdraw - insufficient funds in the account: " + this.getProfile().toString() + this.GetType();
+            return;
         }
 
     }

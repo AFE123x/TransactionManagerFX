@@ -423,7 +423,7 @@ public class TransactionManagerController implements Initializable{
             Date date = new Date(localDate.getYear(), localDate.getMonthValue(), localDate.getDayOfMonth());
             if (!date.isValid()) {
                 messageListView.getItems().add(date.getLastMessage());
-                return;
+                  return;
             }
             Profile profile = makeProfile(date);
             Account accountToClose = database.getAccountByProfileAndType(profile, type);

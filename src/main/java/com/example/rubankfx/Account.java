@@ -87,10 +87,12 @@ public abstract class Account implements Comparable<Account> {
     public void withdraw(double amount) {
         if(this.balance - amount >= 0){
             balance -= amount;
-            helperMessage = "Withdrawal Successful! ";
+            this.helperMessage = "Withdrawal Successful! ";
+            return;
         }
         else{
-            helperMessage = "Cannot Withdraw - insufficient funds in the account: " + this.getProfile().toString() + this.GetType();
+            this.helperMessage = "Cannot Withdraw - insufficient funds in the account: " + this.getProfile().toString() + this.GetType();
+            return;
         }
 
     }
