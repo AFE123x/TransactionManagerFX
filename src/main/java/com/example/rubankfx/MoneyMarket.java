@@ -99,11 +99,9 @@ public class MoneyMarket extends Savings {
                 this.isLoyal = false;
             }
             this.helper = "Withdrawal Successful! ";
-            return;
         }
         else{
             this.helper = "Cannot Withdraw - insufficient funds in the account: " + this.getProfile().toString() + this.GetType();
-            return;
         }
 
     }
@@ -115,9 +113,8 @@ public class MoneyMarket extends Savings {
      *
      * @return the current helper message as a String.
      */
-    public String getHelper() {
-        return helper;
-    }
+
+    public String getHelperMessage() {return helper;}
 
     /**
      * Applies the fees to the balance, and resets withdrawal to zero.
@@ -125,12 +122,7 @@ public class MoneyMarket extends Savings {
     @Override
     public void applyWithdraw() {
         balance +=  monthlyInterest() - monthlyFee();
-        if(balance < 2000){
-            isLoyal = false;
-        }
-        else{
-            isLoyal = true;
-        }
+        isLoyal = !(balance < 2000);
         withdrawal = 0;
     }
 
@@ -151,6 +143,6 @@ public class MoneyMarket extends Savings {
         //Money Market::Savings::Roy Brooks 10/31/1979::Balance $2,909.10::is loyal::withdrawal: 0
         //Money Market::Savings::April March 1/15/1987::Balance $2,500.00::is loyal::withdrawal: 0
         String royalty = isLoyal ? "::is loyal" : "";
-        return "Money Market::Savings::" + holder + " " + holder.getDob().toString() + "::Balance $" + getbalance() + "" + royalty + "::withdrawal: " + withdrawal;
+        return "Money Market::Savings::" + holder + " " + holder.getDob().toString() + "::Balance $" + getbalance() + royalty + "::withdrawal: " + withdrawal;
     }
 }
